@@ -14,15 +14,13 @@ package com.nhnacademy;
 
 import com.nhnacademy.thread.CounterThread;
 
-public class App
-{
-    public static void main( String[] args )
-    {
+public class App  {
+    public static void main( String[] args ) {
         //TODO#5 CounterThread 객체를 생성 합니다.
         // thread-name :  my-counter, countMaxSize :10
-        CounterThread counterThread;
+        CounterThread counterThread = new CounterThread("my-counter", 10);
 
         //TODO#6 counterThread를 시작 합니다.
-
+        counterThread.start();
     }
 }
