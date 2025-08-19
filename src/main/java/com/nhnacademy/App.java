@@ -22,10 +22,11 @@ import com.nhnacademy.thread.Counter;
 public class App {
     public static void main(String[] args) {
         //TODO#5 - AlertDaemon Thread를 초기화하고 start() 메서드를 호출해서 실행 합니다.
-        AlertDaemon alertDaemon = null;
+        AlertDaemon alertDaemon = new AlertDaemon();
+        alertDaemon.start(); // 데몬 O
 
         Thread.currentThread().setName("my-thread");
         Counter counter = new Counter(10);
-        counter.run();
+        counter.run(); // 데몬 X : counter 쓰레드 종료되면 AlterDaemon도 종료
     }
 }

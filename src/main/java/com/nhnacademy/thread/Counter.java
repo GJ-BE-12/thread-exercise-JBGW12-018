@@ -13,9 +13,12 @@
 package com.nhnacademy.thread;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class Counter {
+    private static final Logger log = LoggerFactory.getLogger(Counter.class);
     private final long countMaxSize;
     private long count;
 
@@ -26,7 +29,7 @@ public class Counter {
         }
 
         this.countMaxSize = countMaxSize;
-        this.count = 0l;
+        this.count = 0L;
     }
 
     public void run() {
