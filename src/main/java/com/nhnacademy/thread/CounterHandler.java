@@ -13,9 +13,12 @@
 package com.nhnacademy.thread;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class CounterHandler implements Runnable  {
+    private static final Logger log = LoggerFactory.getLogger(CounterHandler.class);
     private final long countMaxSize;
 
     private long count;
@@ -26,7 +29,7 @@ public class CounterHandler implements Runnable  {
         }
 
         this.countMaxSize = countMaxSize;
-        this.count=0l;
+        this.count=0L;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class CounterHandler implements Runnable  {
             count++;
             log.debug("thread:{},state:{},count:{}",Thread.currentThread().getName(),Thread.currentThread().getState(),count);
             //TODO#2 Thread.yield()를 사용해서 수행되고 있는 작업을 다른 Thread에게 양보 하세요.
-
+            Thread.yield(); // threadA, B가 번갈아가며 실행될 가능성이 올라감
         }while (count<countMaxSize);
     }
 }
