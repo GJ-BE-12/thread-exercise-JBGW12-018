@@ -13,9 +13,12 @@
 package com.nhnacademy.thread;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class CounterHandler implements Runnable  {
+    private static final Logger log = LoggerFactory.getLogger(CounterHandler.class);
     private final long countMaxSize;
 
     private long count;
@@ -26,7 +29,7 @@ public class CounterHandler implements Runnable  {
         }
 
         this.countMaxSize = countMaxSize;
-        this.count=0l;
+        this.count=0L;
     }
 
     @Override
@@ -38,7 +41,7 @@ public class CounterHandler implements Runnable  {
                 throw new RuntimeException(e);
             }
             count++;
-            log.debug("thread:{},state:{},count:{}",Thread.currentThread().getName(),Thread.currentThread().getState(),count);
+            log.debug("thread:{},state:{},count:{}", Thread.currentThread().getName(), Thread.currentThread().getState(), count);
         }while (count<countMaxSize);
     }
 }
