@@ -13,9 +13,12 @@
 package com.nhnacademy.thread;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class CounterHandler implements Runnable  {
+    private static final Logger log = LoggerFactory.getLogger(CounterHandler.class);
     private final long countMaxSize;
 
     private long count;
@@ -26,7 +29,7 @@ public class CounterHandler implements Runnable  {
         }
 
         this.countMaxSize = countMaxSize;
-        this.count=0l;
+        this.count=0L;
     }
 
     @Override
@@ -35,14 +38,14 @@ public class CounterHandler implements Runnable  {
             try {
                 Thread.sleep(1000);
                 count++;
-                log.debug("thread:{},state:{},count:{}",Thread.currentThread().getName(),Thread.currentThread().getState(),count);
+                log.debug("thread:{},state:{},count:{}", Thread.currentThread().getName(), Thread.currentThread().getState(), count);
             } catch (InterruptedException e) {
-                log.debug("{} - state - {}  - interupted 발생",Thread.currentThread().getName(),Thread.currentThread().getState());
+                log.debug("{} - state - {}  - interrupted 발생", Thread.currentThread().getName(), Thread.currentThread().getState());
                 throw new RuntimeException(e);
             }
 
-        //TODO#2 해당 thread가 isInterrupted() 상태가 false 일 while loop를 실행 할 수 있도록 조건을 추가하세요
-        }while (count<countMaxSize);
+        //TODO#2 해당 thread가 isInterrupted() 상태가 false 일때 while loop를 실행 할 수 있도록 조건을 추가하세요
+        }while (count<countMaxSize && !Thread.currentThread().isInterrupted()); // 조건 추가: 인터럽트가 발생하지 않았을때 실행
 
     }
 }
