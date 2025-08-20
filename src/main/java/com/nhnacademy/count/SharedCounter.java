@@ -19,7 +19,7 @@ public class SharedCounter {
     private Semaphore semaphore;
 
     public SharedCounter(){
-        count =0l;
+        count =0L;
     }
 
     public SharedCounter(long count) {
@@ -27,8 +27,8 @@ public class SharedCounter {
             throw new IllegalArgumentException("count > 0 ");
         }
         this.count = count;
-        //TODO#1-1 semaphore를 생성 합니다.( 동시에 하나의 Thread만 접근할 수 있습니다. ), permits prameter를 확인하세요.
-        semaphore = null;
+        //TODO#1-1 semaphore를 생성 합니다.( 동시에 하나의 Thread만 접근할 수 있습니다. ), permits parameter를 확인하세요.
+        semaphore = new Semaphore(2); // permits = 동시에 접근할 수 있는 thread 개수 = 1개
     }
 
     public long getCount(){
@@ -38,23 +38,43 @@ public class SharedCounter {
             semaphore.release()를 호출하여
             허가를 반환 합니다.
          */
-
-        return count;
+        try {
+            semaphore.acquire(); // 허가 획득
+            return count;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            semaphore.release(); // 허가 반납 (반드시 실행해야함, try에서 return해도 finally에서 release 실행시키고 종료)
+        }
     }
 
     public long increaseAndGet(){
         /* TODO#1-3 count = count + 1 증가시키고 count를 반환 합니다.
            1-2 처럼 semaphore를 이용해서 동기화할 수 있도록 구현 합니다.
         */
-        count = count + 1;
-        return count;
+        try {
+            semaphore.acquire(); // 허가 획득
+            count = count + 1;
+            return count;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            semaphore.release(); // 허가 반납 (반드시 실행해야함)
+        }
     }
 
     public long decreaseAndGet(){
         /*TODO#1-4 count = count-1 감소시키고 count를 반환 합니다.
           1-2 처럼 semaphore를 이용해서 동기화할 수 있도록 구현 합니다.
         */
-        count = count - 1;
-        return count;
+        try {
+            semaphore.acquire(); // 허가 획득
+            count = count - 1;
+            return count;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            semaphore.release(); // 허가 반납 (반드시 실행해야함)
+        }
     }
 }

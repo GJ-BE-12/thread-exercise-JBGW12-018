@@ -14,11 +14,14 @@ package com.nhnacademy.thread;
 
 import com.nhnacademy.count.SharedCounter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 @Slf4j
 public class CounterIncreaseHandler implements Runnable {
+    private static final Logger log = LoggerFactory.getLogger(CounterIncreaseHandler.class);
     private final SharedCounter sharedCounter;
 
     public CounterIncreaseHandler(SharedCounter sharedCounter) {
@@ -36,7 +39,7 @@ public class CounterIncreaseHandler implements Runnable {
             try {
                 Thread.sleep(1000);
                 //sharedCounter의 count를 1증가 시키고 count값을 반환 합니다.
-                long count = sharedCounter.increaseAndGet();
+                long count = sharedCounter.increaseAndGet(); // permits = 1 -> 한번에 하나의 thread만 접근 가능 => 카운트 정상 증가 (중복X)
                 log.debug("thread:{}, count:{}", Thread.currentThread().getName(), count);
             } catch (Exception e) {
                 log.debug("{} - interrupt!",Thread.currentThread().getName());
