@@ -14,11 +14,14 @@ package com.nhnacademy.thread;
 
 import com.nhnacademy.count.SharedCounter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 @Slf4j
 public class CounterIncreaseHandler implements Runnable {
+    private static final Logger log = LoggerFactory.getLogger(CounterIncreaseHandler.class);
     private final SharedCounter sharedCounter;
 
     public CounterIncreaseHandler(SharedCounter sharedCounter) {

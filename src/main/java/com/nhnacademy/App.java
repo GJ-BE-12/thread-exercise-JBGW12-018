@@ -15,14 +15,15 @@ package com.nhnacademy;
 import com.nhnacademy.count.SharedCounter;
 import com.nhnacademy.thread.CounterIncreaseHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Slf4j
-public class App 
-{
+public class App {
+    private static final Logger log = LoggerFactory.getLogger(App.class);
 
-    public static void main( String[] args )
-    {
-
+    public static void main( String[] args ) {
         //shardCounter 객체를 0으로 초기화 합니다.
         SharedCounter sharedCounter = new SharedCounter(0l);
 
