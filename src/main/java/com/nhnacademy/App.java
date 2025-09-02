@@ -14,16 +14,15 @@ package com.nhnacademy;
 
 import com.nhnacademy.thread.CounterHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class App {
-    private static final Logger log = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args ) throws InterruptedException {
+        Thread mainThread = Thread.currentThread();
+
         //counterHandlerA 객체를 생성 합니다. countMaxSize : 10
-        CounterHandler counterHandlerA = new CounterHandler(10L);
+        CounterHandler counterHandlerA = new CounterHandler(10L ,mainThread);
         //threadA 생성시 counterHandlerA 객체를 paramter로 전달 합니다.
         Thread threadA = new Thread(counterHandlerA);
         //threadA의 name을 'my-counter-A' 로 설정 합니다.
@@ -31,7 +30,7 @@ public class App {
         log.debug("threadA-state:{}",threadA.getState());
 
         //counterHandlerB 객체를 생성 합니다. countMaxSize : 10
-        CounterHandler counterHandlerB = new CounterHandler(10L);
+        CounterHandler counterHandlerB = new CounterHandler(10L, mainThread);
         //threadB 생성시 counterHandlerB 객체를 paramter로 전달 합니다.
         Thread threadB = new Thread(counterHandlerB);
         //threadB의 name을 'my-counter-B' 로 설정 합니다.
@@ -49,6 +48,9 @@ public class App {
         //TODO#1 Main Thread가 threadA, ThreadB가 종료될 때 까지 대기 합니다. Thread.yield를 사용 합니다.
         while (threadA.isAlive() || threadB.isAlive()) { // threadA, B 중 하나라도 살아있는 동안 -> Main Thread 양보 (join 보다 효율은 떨어짐, 계속 cpu를 확인해야함)
             Thread.yield();
+            // 1. main thread(주체, 현재 실행되고있는 스레드)가 ->
+            // 2. 양보(yield, 동사)함 ->
+            // 3. 다른 스레드(객체, 대상, thread A or B)에게..
         }
 
         // threadA, threadB가 종료되면 'Application exit!' message를 출력 합니다.
