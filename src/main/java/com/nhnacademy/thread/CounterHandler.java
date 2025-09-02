@@ -13,23 +13,23 @@
 package com.nhnacademy.thread;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class CounterHandler implements Runnable  {
-    private static final Logger log = LoggerFactory.getLogger(CounterHandler.class);
     private final long countMaxSize;
 
     private long count;
+    private Thread mainTread;
 
-    public CounterHandler(long countMaxSize) {
+    public CounterHandler(long countMaxSize, Thread mainTread) {
         if(countMaxSize<=0){
             throw new IllegalArgumentException();
         }
 
         this.countMaxSize = countMaxSize;
         this.count=0L;
+
+        this.mainTread = mainTread;
     }
 
     @Override
@@ -37,6 +37,7 @@ public class CounterHandler implements Runnable  {
 
         do {
             try {
+                log.debug("Main thread:{} - state:{}", Thread.currentThread().getName(), mainTread.getState()); // Main thread -> WAITING
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
