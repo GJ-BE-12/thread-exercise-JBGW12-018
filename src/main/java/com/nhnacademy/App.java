@@ -14,14 +14,11 @@ package com.nhnacademy;
 
 import com.nhnacademy.thread.CounterHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class App {
-    private static final Logger log = LoggerFactory.getLogger(App.class);
 
-    public static void main(String[] args ) throws InterruptedException {
+    public static void main(String[] args ) {
         //counterHandlerA 객체를 생성 합니다. countMaxSize : 10
         CounterHandler counterHandlerA = new CounterHandler(10L);
         //threadA 생성시 counterHandlerA 객체를 paramter로 전달 합니다.
@@ -38,6 +35,8 @@ public class App {
         threadB.setName("my-counter-B");
         log.debug("threadB-state:{}",threadB.getState()); // B 상태: New
 
+        // A, B 각각 다른 핸들러를 사용
+
         //threadA를 시작 합니다.
         threadA.start();
         log.debug("threadA-state:{}",threadA.getState()); // A 상태: RUNNABLE
@@ -47,12 +46,18 @@ public class App {
         log.debug("threadB-state:{}",threadB.getState()); // B 상태: RUNNABLE
 
         //TODO#1 - main Thread 에서 3초 후  threadA에 interrupt 예외를 발생 시킴 니다.
-        Thread.sleep(3000);
-        threadA.interrupt(); // threadA 인터럽트 발생! -> threadA는 카운트(반복문) 종료
-        //TODO#3 Main Thread가 threadA, ThreadB가 종료될 때 까지 대기 합니다. Thread.yield를 사용 합니다.
-        while (threadA.isAlive() || threadB.isAlive()) {
-            Thread.yield(); // threadA, B가 살아있는 동안 Main Thread 대기
+        try {
+            Thread.sleep(3000);
+            log.debug("threadA에 interrupt를 발생시킴");
+            threadA.interrupt(); // threadA 인터럽트 발생! -> threadA는 카운트(반복문) 종료
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+
+        //TODO#3 Main Thread가 threadA, ThreadB가 종료될 때 까지 대기 합니다. Thread.yield를 사용 합니다.
+        do {
+            Thread.yield(); // threadA, B가 살아있는 동안 Main Thread 대기(양보)
+        } while (threadA.isAlive() || threadB.isAlive());
 
         //threadA, threadB 상태를 출력 합니다.
         log.debug("threadA-status:{}",threadA.getState()); // A 상태: TERMINATED
