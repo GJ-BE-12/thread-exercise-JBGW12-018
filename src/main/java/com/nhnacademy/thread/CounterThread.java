@@ -13,13 +13,10 @@
 package com.nhnacademy.thread;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 //TODO#1 CounterThread는 Thread를 상속 합니다.
 public class CounterThread extends Thread {
-    private static final Logger log = LoggerFactory.getLogger(CounterThread.class);
     private final long countMaxSize;
 
     private long count;
