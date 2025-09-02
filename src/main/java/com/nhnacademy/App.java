@@ -20,12 +20,13 @@ public class App {
         CounterHandler counterHandler = new CounterHandler(10);
 
         //TODO#5 thread 생성시 counterHandler 객체를 paramter로 전달 합니다.
-        Thread thread = new Thread(counterHandler);
+        Thread thread = new Thread(counterHandler); // counterHandler = task(Runnable 타입임)
+        // task: 스레드가 시작될 때 실행 메소드가 호출되는 객체. (null이라면 아무것도하지 않음)
 
         //TODO#6 thread의 name을 my-counter로 설정 합니다.
         thread.setName("my-counter");
 
         //TODO#7 thread를 시작 합니다.
-        thread.start();
+        thread.start(); // task 수행 (CounterHandler의 run())
     }
 }

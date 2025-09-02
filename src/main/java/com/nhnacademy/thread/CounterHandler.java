@@ -13,13 +13,10 @@
 package com.nhnacademy.thread;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 //TODO#1 Runnable interface을 implements(구현) 합니다.
 public class CounterHandler implements Runnable {
-    private static final Logger log = LoggerFactory.getLogger(CounterHandler.class);
     private final long countMaxSize;
 
     private long count;
@@ -47,7 +44,9 @@ public class CounterHandler implements Runnable {
 
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException e) { }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
 
             log.debug("thread:{}, count:{}", Thread.currentThread().getName(), count);
         }while (count<countMaxSize);
