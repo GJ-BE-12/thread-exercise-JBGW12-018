@@ -14,14 +14,9 @@ package com.nhnacademy.thread;
 
 import com.nhnacademy.count.SharedCounter;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
 
 @Slf4j
 public class CounterIncreaseHandler implements Runnable {
-    private static final Logger log = LoggerFactory.getLogger(CounterIncreaseHandler.class);
     private final SharedCounter sharedCounter;
 
     public CounterIncreaseHandler(SharedCounter sharedCounter) {
@@ -39,7 +34,7 @@ public class CounterIncreaseHandler implements Runnable {
         //현재 thread에 인터럽트가 발생하지 않은 동안 반복
         while(!Thread.currentThread().isInterrupted()/* whlie 조건을 수정 하세요!*/) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1000); // 현재 스레드 (threadA or threadB)
                 //TODO 2-3 sharedCounter의 count를 1증가 시키고 count값을 반환 합니다.
                 long count = sharedCounter.increaseAndGet(); // threadA, B가 동시에 접근함 (같은 count값을 가질 수 있음 = race condition)
 

@@ -15,14 +15,11 @@ package com.nhnacademy;
 import com.nhnacademy.count.SharedCounter;
 import com.nhnacademy.thread.CounterIncreaseHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class App {
-    private static final Logger log = LoggerFactory.getLogger(App.class);
 
-    public static void main(String[] args ) throws InterruptedException {
+    public static void main(String[] args ) { // main thread : RUNNABLE
 
         //TODO#1 shardCounter 객체를 0으로 초기화 합니다.
         SharedCounter sharedCounter = new SharedCounter(0);
@@ -31,29 +28,34 @@ public class App {
         CounterIncreaseHandler counterIncreaseHandler = new CounterIncreaseHandler(sharedCounter);
 
         //TODO#3 counterIncreaseHandler를 이용해서 threadA를 생성 합니다.
-        Thread threadA = new Thread(counterIncreaseHandler);
+        Thread threadA = new Thread(counterIncreaseHandler); // threadA : NEW
         //TODO#4 threadA의 thread name을 "thread-A"로 설정 합니다.
         threadA.setName("thread-A");
         //TODO#5 threadA를 시작 합니다.
-        threadA.start();
+        threadA.start(); // threadA : RUNNABLE
 
         //TODO#6 counterIncreaseHandler를 이용해서 threadB를 생성 합니다.
-        Thread threadB = new Thread(counterIncreaseHandler);
+        Thread threadB = new Thread(counterIncreaseHandler); // threadB : NEW
         //TODO#7 threadB의 name을 'thread-B' 로 설정 합니다.
         threadB.setName("thread-B");
         //TODO#8 threadB를 시작 합니다.
-        threadB.start();
+        threadB.start(); // threadB : RUNNABLE
 
         //TODO#9 main thread가 실행 후 20초 후 threadA, threadB 종료될 수 있도록 interrupt 발생 시킵니다.
-        Thread.sleep(20000); // 20초 후
-        threadA.interrupt(); // threadA에 인터럽트 발생시킴
-        threadB.interrupt(); // threadB에 인터럽트 발생시킴
+        try {
+            Thread.sleep(20000); // main thread : WAITING, 20초 후 RUNNABLE
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        threadA.interrupt(); // threadA에 인터럽트 발생시킴, threadA : TERMINATED
+        threadB.interrupt(); // threadB에 인터럽트 발생시킴, threadB : TERMINATED
         //TODO#10 main Thread는 threadA와 threadB의 상태가 terminated가 될 때 까지 대기 합니다. 즉 threadA, threadB가 종료될 때 까지 대기(양보) 합니다.
         do {
-            Thread.yield(); // Main Tread 대기(양보)
+            Thread.yield(); // main Tread 대기(양보) -> threadA or threadB에게...
         } while (threadA.getState() != Thread.State.TERMINATED || // treadA,B의 상태가 terminated가 아닐 동안
                  threadB.getState() != Thread.State.TERMINATED);
 
         log.debug("System exit!");
-    }
+    } // main thread : TERMINATED
 }
