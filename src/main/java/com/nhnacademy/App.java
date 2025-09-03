@@ -15,35 +15,38 @@ package com.nhnacademy;
 import com.nhnacademy.count.SharedCounter;
 import com.nhnacademy.thread.CounterIncreaseHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class App {
-    private static final Logger log = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args ) {
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 
         //shardCounter 객체를 0으로 초기화 합니다.
-        SharedCounter sharedCounter = new SharedCounter(0L);
-
+        SharedCounter sharedCounter = new SharedCounter(0L); // 초기 count값을 0으로 초기화, semaphore의 permits(허가 개수)을 1로 설정
         //counterIncreaseHandler 객체를 생성 합니다.
         CounterIncreaseHandler counterIncreaseHandler = new CounterIncreaseHandler(sharedCounter);
+
         //counterIncreaseHandler를 이용해서 threadA를 생성 합니다.
         Thread threadA = new Thread(counterIncreaseHandler);
         //threadA의 thread name을 "thread-A"로 설정 합니다.
         threadA.setName("thread-A");
         //threadA를 시작 합니다.
-        threadA.start();
+        threadA.start(); // threadA : RUNNABLE
 
         //counterIncreaseHandler를 이용해서 threadB를 생성 합니다.
         Thread threadB = new Thread(counterIncreaseHandler);
         //threadB의 name을 'thread-B' 로 설정 합니다.
         threadB.setName("thread-B");
-
         //threadB를 시작 합니다.
-        threadB.start();
+        threadB.start(); // threadB : RUNNABLE
+
+        // threadA, threadB가 작업(task)을 시작함 (increaseAndGet() : count를 1증가시키고 출력..)
+        // permits이 1로 설정되있음
+        // 1. 하나의 thread가 허가를 획득하고 임계영역에 접근함 (나머지 스레드는 임계영역에 접근하지 못함)
+        // 2. 스레드가 허가를 반납하면, 대기 중인(허가 획득을 시도하던) 스레드가 허가를 획득하고 임계영역에 접근함
+        // => 3. 자원을 사용한 스레드는 임계영역을 벗어날 때, 반드시 허가를 반납해야함
+        // (1~3 반복)
 
         //main thread가 실행 후 20초 후 threadA, threadB 종료될 수 있도록 interrupt 발생 시킵니다.
         try {

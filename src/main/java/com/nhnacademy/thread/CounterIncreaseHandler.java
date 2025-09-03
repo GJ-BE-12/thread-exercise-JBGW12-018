@@ -14,14 +14,11 @@ package com.nhnacademy.thread;
 
 import com.nhnacademy.count.SharedCounter;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 @Slf4j
 public class CounterIncreaseHandler implements Runnable {
-    private static final Logger log = LoggerFactory.getLogger(CounterIncreaseHandler.class);
     private final SharedCounter sharedCounter;
 
     public CounterIncreaseHandler(SharedCounter sharedCounter) {
@@ -43,7 +40,7 @@ public class CounterIncreaseHandler implements Runnable {
                 log.debug("thread:{}, count:{}", Thread.currentThread().getName(), count);
             } catch (Exception e) {
                 log.debug("{} - interrupt!",Thread.currentThread().getName());
-                //현제 Thread에 interrupt()를 호출하여 interrput()를 발생 시킵 니다. 즉 현제 Thread의 interrupted 값이 -> true로 변경 됩니다. -> 즉 while 문을 종료하게 됩니다.
+                //현제 Thread에 interrupt()를 호출하여 interrupt()를 발생 시킵 니다. 즉 현제 Thread의 interrupted 값이 -> true로 변경 됩니다. -> 즉 while 문을 종료하게 됩니다.
                 Thread.currentThread().interrupt();
             }
         }

@@ -28,7 +28,8 @@ public class SharedCounter {
         }
         this.count = count;
         //TODO#1-1 semaphore를 생성 합니다.( 동시에 하나의 Thread만 접근할 수 있습니다. ), permits parameter를 확인하세요.
-        semaphore = new Semaphore(2); // permits = 동시에 접근할 수 있는 thread 개수 = 1개
+        semaphore = new Semaphore(1); // permits = 동시에 접근할 수 있는 thread 개수 = 1개
+        // (permit 1개로 스레드의 자원 사용여부를 결정함, 이 permit을 가지고 있는 스레드만 임계영역에 접근 가능함)
     }
 
     public long getCount(){
