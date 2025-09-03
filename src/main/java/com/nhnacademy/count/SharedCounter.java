@@ -36,26 +36,26 @@ public class SharedCounter {
     // synchronized : 한번에 하나만(특정 코드나, 블럭) (소유권 O)
 
     //TODO#1-2 mehtod 단위 lock을 걸고, count 를 반환 합니다.
-    public synchronized/*synchronized 메서드 : 메서드 전체를 동기화*/ long getCount(){
+    public synchronized /*synchronized 메서드 : 메서드 전체를 동기화*/ long getCount() { // 한 번에 하나의 스레드만 접근가능
         return count;
     }
 
     public long increaseAndGet(){
         //TODO#1-3 block 단위로 lock을 걸고 count = count + 1 증가시키고 count를 반환 합니다.
         /*synchronized 블럭 : 필요한 부분만 보호*/
-        synchronized (this) {
+        synchronized (this) { // 한 번에 하나의 스레드만 접근가능
             count = count + 1;
-            return count;
+            return count; // 블럭 안에서 바로 반환 (일관성 보장)
         }
     }
 
     public long decreaseAndGet(){
         //TODO#1-4 count = count -1  부분 lock을 걸고, count를 반환 합니다.
         /*synchronized 블럭*/
-        synchronized (this) {
-            count = count - 1;
+        synchronized (this) { // 한 번에 하나의 스레드만 접근가능
+            count = count - 1; // 감소 부분은 동기화되지만,
         }
 
-        return count;
+        return count; // 리턴은 lock이 풀린 후 실행 -> 다른 스레드가 그 사이에 increaseAndGet()을 호출하면 값이 바뀔 수 있음 (감소한 값, 반환 값이 다를 수 있음, 일관성 깨질 수 있음)
     }
 }

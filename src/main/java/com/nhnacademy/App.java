@@ -15,20 +15,17 @@ package com.nhnacademy;
 import com.nhnacademy.count.SharedCounter;
 import com.nhnacademy.thread.CounterIncreaseHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 @Slf4j
 public class App {
-    private static final Logger log = LoggerFactory.getLogger(App.class);
 
     public static void main( String[] args ) {
         //shardCounter 객체를 0으로 초기화 합니다.
-        SharedCounter sharedCounter = new SharedCounter(0l);
-
+        SharedCounter sharedCounter = new SharedCounter(0l); // 카운트 증가 -> 증가, 리턴 모두 synchronized 되있음
         //counterIncreaseHandler 객체를 생성 합니다.
         CounterIncreaseHandler counterIncreaseHandler = new CounterIncreaseHandler(sharedCounter);
+
         //counterIncreaseHandler를 이용해서 threadA를 생성 합니다.
         Thread threadA = new Thread(counterIncreaseHandler);
         //threadA의 thread name을 "thread-A"로 설정 합니다.
@@ -40,7 +37,6 @@ public class App {
         Thread threadB = new Thread(counterIncreaseHandler);
         //threadB의 name을 'thread-B' 로 설정 합니다.
         threadB.setName("thread-B");
-
         //threadB를 시작 합니다.
         threadB.start();
 
